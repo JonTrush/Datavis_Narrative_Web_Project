@@ -4,7 +4,6 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
 
-
 <div id="cancer_scatter4"></div>
 <script>
 
@@ -12,7 +11,7 @@
         width = 800 - margin.left - margin.right,
         height = 800 - margin.top - margin.bottom;
 
-    var svg = d3.select("#cancer_scatter")
+    var svg = d3.select("#cancer_scatter4")
       .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -52,7 +51,7 @@
         .attr("stroke", "black")
         .text("State Pop");
 
-    var tooltip = d3.select("#cancer_scatter")
+    var tooltip = d3.select("#cancer_scatter4")
     .append("div")
     .style("opacity", 0)
     .attr("class", "tooltip")
