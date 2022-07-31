@@ -68,7 +68,7 @@
 
   var mousemove = function(d) {
     tooltip
-      .html("State: " + d.State + "<br>Total state population: " + d.StatePop + "<br> Total lung cancer deaths per 100k: " + d.LungTotal + "<br> Total cancer deaths per 100k: " + d.TotalRate)
+      .html("State: " + d.State + "<br>Total state population: " + d.StatePop + "<br> Total lung cancer deaths per 100k: " + d.LungTotal + "<br> Total cancer deaths per 100k: " + d.TotalRate + "<br> Smoking Rates : " + d.smokingRate)
       .style("right", (d3.mouse(this)[0] + 90) + "px")
       .style("bottom", (d3.mouse(this)[1]) + "px")
   }
