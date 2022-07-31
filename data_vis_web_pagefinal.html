@@ -57,6 +57,35 @@
         .attr("stroke", "black")
         .text("State Pop");
 
+    var tooltip = d3.select("#cancer_scatter")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+
+  var mouseover = function(d) {
+    tooltip
+      .style("opacity", 1)
+  }
+
+  var mousemove = function(d) {
+    tooltip
+      .html("State: " + d.State + "<br>Total state population: " + d.StatePop + "<br> Total lung cancer deaths per 100k: " + d.LungTotal + "<br> Total cancer deaths per 100k: " + d.TotalRate)
+      .style("right", (d3.mouse(this)[0] + 90) + "px")
+      .style("bottom", (d3.mouse(this)[1]) + "px")
+  }
+
+  var mouseleave = function(d) {
+    tooltip
+      .transition()
+      .duration(200)
+      .style("opacity", 0)
+  }
+
     svg.append('g')
     .selectAll("dot")
     .data(data)
@@ -67,6 +96,10 @@
         .attr("r", 5)
         .style("fill", "#9161AB")
         .style("opacity", 0.5)
+        .on("mouseover", mouseover )
+        .on("mousemove", mousemove )
+        .on("mouseleave", mouseleave )
+    
     })
 
     const annotation1 = [
