@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+
+<body>
+    <form action=data_vis_web_page2>
+        <button type="submit">Click me</button>
+    </form>
+  </body>
+
+<div id="cancer_scatter"></div>
+<script>
+
+    var margin = {top: 30, right: 30, bottom: 30, left: 60},
+        width = 800 - margin.left - margin.right,
+        height = 800 - margin.top - margin.bottom;
+
+    var svg = d3.select("#cancer_scatter")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.append("text")
+        .attr("transform", "translate(100,0)")
+        .attr("font-size", "24px")
+        .text("Lung Cancer Deaths per 100k VS Total State Population")
+
+    d3.csv("https://raw.githubusercontent.com/JonTrush/Datavis_data/main/cancer.csv", function(data) {
+
+      var x = d3.scaleLinear()
+        .domain([10, 100])
+        .range([ 0, width ]);
+      svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .append("text")
+        .attr("y", 30)
+        .attr("x", 400)
+        .attr("text-anchor", "end")
+        .attr("stroke", "black")
+        .text("Lung Cancer Deaths Per 100k");
+
+      var y = d3.scaleLinear()
+        .domain([400000, 40000000])
+        .range([ height, 0]);
+      svg.append("g")
+        .call(d3.axisLeft(y))
+        .append("text")
+        .attr("y", -10)
+        .attr("x", -10)
+        .attr("text-anchor", "end")
+        .attr("stroke", "black")
+        .text("State Pop");
+
+    var tooltip = d3.select("#cancer_scatter")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+
+  var mouseover = function(d) {
+    tooltip
+      .style("opacity", 1)
+  }
+
+  var mousemove = function(d) {
+    tooltip
+      .html("State: " + d.State + "<br>Total state population: " + d.StatePop + "<br> Total lung cancer deaths per 100k: " + d.LungTotal + "<br> Total cancer deaths per 100k: " + d.TotalRate)
+      .style("right", (d3.mouse(this)[0] + 90) + "px")
+      .style("bottom", (d3.mouse(this)[1]) + "px")
+  }
+
+  var mouseleave = function(d) {
+    tooltip
+      .transition()
+      .duration(200)
+      .style("opacity", 0)
+  }
+
+    svg.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+        .attr("cx", function (d) { return x(d.LungTotal); } )
+        .attr("cy", function (d) { return y(d.StatePop); } )
+        .attr("r", 5)
+        .style("fill", "#9161AB")
+        .style("opacity", 0.5)
+        .on("mouseover", mouseover )
+        .on("mousemove", mousemove )
+        .on("mouseleave", mouseleave )
+    
+    })
+
+    const annotation1 = [
+    {
+    type: d3.annotationCalloutCircle,
+    note: {
+    label: 
+    "Kentucky and West Virgina have some of the highest smoking and mining rates in the US",
+    title: "highest Lung cancer rates",
+    wrap: 60,
+    padding: 10,
+    },
+    color: ["blue"],
+    x: 560,
+    y: 688,
+    dy: -30,
+    dx: 20,
+    subject: {
+        radius: 30,
+        radiusPadding: 5
+    }
+    }
+    ]
+
+    // Add annotation to the chart
+    const makeAnnotation1 = d3.annotation()
+    .annotations(annotation1)
+
+    svg.append("g")
+    .attr("style", "font-size:15px;")
+    .call(makeAnnotation1)    
+
+</script>
